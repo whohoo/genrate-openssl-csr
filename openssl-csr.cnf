@@ -23,7 +23,7 @@
 
 # 5. 通过docker-compose运行容器, 在当前目录输出private.key与new.csr文件, 并在终端显示验证信息. 
 # docker-compose up
-# 文件生成好后, 释放容器 
+# 文件生成好后, 释放容器 
 # docker-compose down
 
 
