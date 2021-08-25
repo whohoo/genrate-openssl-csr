@@ -1,0 +1,17 @@
+#####################################
+#    Wally's docker-compose file    #
+#####################################
+
+version: '3.5'
+
+services:
+  openssl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: openssl-csr
+    container_name: openssl-csr
+    # entrypoint: ["/bin/sh", "-c", "--", "while true; do sleep 30; done;"]
+    volumes:
+      - ./:/srv
+    network_mode: "none"
