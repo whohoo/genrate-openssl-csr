@@ -1,2 +1,4 @@
 private.key
 new.csr
+new-file.csr
+private-key.pem

@@ -3,7 +3,8 @@
 #################################
 
 # 1. 在本配置文件当前目录运行openssl命令, 本命令会在当前目录下生成private-key.pem与new-file.csr两文件, private-key.pem是PKCS#8文件格式规范
-# openssl req -new -sha256 -newkey rsa:2048 -nodes -keyout private-key.pem -out new-file.csr -config openssl-csr.cnf
+# 默认-digest是sha256, -newkey是rsa:2048
+# openssl req -new -nodes -out new-file.csr -config openssl-csr.cnf
 
 
 # 2. 两步生成private-key.pem与new-file.csr文件,
@@ -14,11 +15,11 @@
 
 
 # 3. 查看已生成的CSR文件
-# openssl req -noout -text -in new-file.csr
+# openssl req -noout -text -verify -in new-file.csr
 
 
 # 4. 在docker中运行下载openssl程序并运行第一条openssl命令
-# docker run -it --rm -v "$(pwd)":/srv -w /srv alpine apk add --no-cache openssl && openssl req -new -sha256 -newkey rsa:2048 -nodes -keyout private-key.pem -out new-file.csr -config openssl-csr.cnf
+# docker run -it --rm -v "$(pwd)":/srv -w /srv alpine apk add --no-cache openssl && openssl req -new -nodes -out new-file.csr -config openssl-csr.cnf
 
 
 # 5. 通过docker-compose运行容器, 在当前目录输出private-key.pem与new-file.csr文件, 并在终端显示验证信息. 
@@ -28,16 +29,19 @@
 
 
 # 6.1 PKCS#1转PKCS#8
-# openssl pkcs8 -topk8 -inform PEM -in pkcs1.pem -outform PEM -nocrypt -out pkcs8.pem
+# openssl pkcs8 -topk8 -in pkcs1.pem -nocrypt -out pkcs8.pem
 # 6.2 PKCS#8转PKCS#1
 # openssl rsa -in pkcs8.pem -out pkcs1.pem
 
 
 [req]
+default_bits       = 2048
+prompt = no
 distinguished_name = req_distinguished_name
+### 默认输出密钥文件名
+default_keyfile    = private-key.pem
 ### 如果不需要定义SAN (Subject Alternative name), 则在req_extensions前加上(#)
 req_extensions = req_ext
-prompt = no
 [req_distinguished_name]
 ### Country Name (2 letter code)
 C   = CN
